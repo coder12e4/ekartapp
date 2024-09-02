@@ -24,7 +24,7 @@ class _ProductViewState extends State<ProductView> {
   void initState() {
     productModel = widget.productModel;
     kartCubit = KartCubit();
-
+    kartCubit.displayCart();
     // TODO: implement initState
     super.initState();
   }
@@ -83,13 +83,23 @@ class _ProductViewState extends State<ProductView> {
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(16)),
                       child: BlocBuilder<KartCubit, KartState>(
+                        bloc: kartCubit,
                         builder: (context, state) {
-                          final cartCount =
-                              context.watch<KartCubit>().cartCount;
-                          return Text(
-                            cartCount.toString(),
-                            style: TextStyle(fontSize: 8, color: Colors.white),
-                          );
+                          if (state is KartSuccessWithLenth) {
+                            return Text(
+                              state.cartItems.length.toString(),
+                              style:
+                                  TextStyle(fontSize: 8, color: Colors.white),
+                            );
+                          } else if (state is KartFail) {
+                            return Text(
+                              "Item all ready in kart",
+                              style:
+                                  TextStyle(fontSize: 8, color: Colors.white),
+                            );
+                          } else {
+                            return SizedBox();
+                          }
                         },
                       ),
                     ),
@@ -169,16 +179,19 @@ class _ProductViewState extends State<ProductView> {
                             listener: (context, state) {
                               if (state is KartLoading) {
                               } else if (state is KartSuccess) {
+                                kartCubit.displayCart();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text('Added to Cart!'),
                                     duration: Duration(seconds: 2),
                                   ),
                                 );
+                              } else if (state is KartSuccessWithLenth) {
                               } else if (state is KartFail) {
+                                kartCubit.displayCart();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(state.error),
+                                    content: Text("item Already in kart"),
                                     duration: Duration(seconds: 2),
                                   ),
                                 );
@@ -191,6 +204,12 @@ class _ProductViewState extends State<ProductView> {
                                     child: CircularProgressIndicator(),
                                   );
                                 } else if (state is KartSuccess) {
+                                  return Text("Add to cart",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.black));
+                                } else if (state is KartSuccessWithLenth) {
                                   return Text("Add to cart",
                                       style: TextStyle(
                                           fontSize: 12,

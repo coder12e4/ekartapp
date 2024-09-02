@@ -10,9 +10,7 @@ part 'kart_state.dart';
 
 class KartCubit extends Cubit<KartState> {
   int _cartCount = 0;
-  KartCubit() : super(KartInitial()) {
-    _loadCartCount(); //
-  }
+  KartCubit() : super(KartInitial());
   int get cartCount => _cartCount;
 
   Future<void> _loadCartCount() async {
@@ -39,7 +37,11 @@ class KartCubit extends Cubit<KartState> {
       emit(KartSuccess(
           cartList.map((e) => ProductModel.fromJson(jsonDecode(e))).toList()));
     } else {
-      emit(KartFail("Product already in the cart"));
+      emit(KartFail(cartList
+          .map((e) => ProductModel.fromJson(jsonDecode(e)))
+          .toList()
+          .length
+          .toString()));
     }
   }
 
@@ -47,15 +49,17 @@ class KartCubit extends Cubit<KartState> {
     final prefs = await SharedPreferences.getInstance();
     List<String> cartList = prefs.getStringList('cart') ?? [];
     _cartCount = cartList.length;
-    emit(KartSuccess(
+    emit(KartSuccessWithLenth(
         cartList.map((e) => ProductModel.fromJson(jsonDecode(e))).toList()));
   }
 
-  Future<int> getCount() async {
+  Future<void> getCount() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> cartList = prefs.getStringList('cart') ?? [];
-    _cartCount = cartList.length;
-    return _cartCount;
+    _cartCount = cartList
+        .map((e) => ProductModel.fromJson(jsonDecode(e)))
+        .toList()
+        .length;
   }
 
   Future<void> removeFromCart(ProductModel product) async {

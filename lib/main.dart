@@ -10,6 +10,7 @@ import 'cubit/kartpage/kart_cubit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+/*
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -18,6 +19,7 @@ void main() async {
 
   await FlutterLocalNotificationsPlugin().initialize(initializationSettings);
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+*/
 
   runApp(const MyApp());
 }

@@ -12,6 +12,11 @@ final class KartSuccess extends KartState {
   KartSuccess(this.cartItems);
 }
 
+final class KartSuccessWithLenth extends KartState {
+  final List<ProductModel> cartItems;
+  KartSuccessWithLenth(this.cartItems);
+}
+
 final class KartFail extends KartState {
   String error;
 

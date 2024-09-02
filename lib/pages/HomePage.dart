@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     homeCubit = HomeCubit(HomeRepository());
     homeCubit.getCategories(selectedIndex);
     kartCubit = KartCubit();
-
+    kartCubit.displayCart();
     // TODO: implement initState
     super.initState();
   }
@@ -95,14 +95,21 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(16)),
                               child: BlocBuilder<KartCubit, KartState>(
+                                bloc: kartCubit,
                                 builder: (context, state) {
-                                  final cartCount =
-                                      context.watch<KartCubit>().cartCount;
-                                  return Text(
-                                    cartCount.toString(),
-                                    style: TextStyle(
-                                        fontSize: 8, color: Colors.white),
-                                  );
+                                  if (state is KartSuccessWithLenth) {
+                                    return Text(
+                                      state.cartItems.length.toString(),
+                                      style: TextStyle(
+                                          fontSize: 8, color: Colors.white),
+                                    );
+                                  } else {
+                                    return Text(
+                                      "00",
+                                      style: TextStyle(
+                                          fontSize: 8, color: Colors.white),
+                                    );
+                                  }
                                 },
                               )),
                           SizedBox(
