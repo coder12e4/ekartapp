@@ -39,6 +39,8 @@ dependencies:
   http:
   hexcolor: ^3.0.1
   shared_preferences:
+  flutter_local_notifications:
+  workmanager:
 
 dev_dependencies:
   flutter_test:

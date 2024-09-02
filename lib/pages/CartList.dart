@@ -44,22 +44,24 @@ class _CartListState extends State<CartList> {
                   );
                 } else if (state is KartSuccess) {
                   return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 22,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 22,
                           ),
                           Image.asset(
                             "assets/images/image.png",
                             height: 30,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
                           Text(
@@ -108,65 +110,166 @@ class _CartListState extends State<CartList> {
                       SizedBox(
                         height: 22,
                       ),
-                      Expanded(
+                      Padding(
+                        padding: const EdgeInsets.only(left: 22, bottom: 22),
+                        child: Text(
+                          "Cart",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      Flexible(
                           child: ListView.builder(
                               itemCount: cartItems.length,
                               itemBuilder: (context, intex) {
-                                return Row(
-                                  children: [
-                                    Image.network(
-                                      cartItems[intex].image!,
-                                      height: 80,
-                                      width: 80,
+                                return Container(
+                                  padding: EdgeInsets.all(8),
+                                  margin: EdgeInsets.only(
+                                      left: 22, right: 22, bottom: 12),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          width: .5, color: Colors.black26),
                                     ),
-                                    SizedBox(
-                                        width:
-                                            16), // Add some space between the image and the text
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          SizedBox(
-                                            height: 40,
-                                            child: Row(
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.network(
+                                        cartItems[intex].image!,
+                                        height: 80,
+                                        width: 80,
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              16), // Add some space between the image and the text
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 40,
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      cartItems[intex].title!,
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.left,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  Spacer(), // Push the delete icon to the right
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      kartCubit.removeFromCart(
+                                                          cartItems[intex]);
+                                                    },
+                                                    child: Icon(Icons.delete),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    cartItems[intex].title!,
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.left,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                Container(
+                                                  width: 120,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.black38),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                  ),
+                                                  alignment: Alignment.center,
+                                                  child: const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                          height: 40,
+                                                          width: 30,
+                                                          child: Center(
+                                                              child:
+                                                                  Text("-"))),
+                                                      Divider(
+                                                        height: 40,
+                                                        color: Colors.black38,
+                                                        thickness: 1,
+                                                      ),
+                                                      SizedBox(
+                                                          height: 40,
+                                                          width: 30,
+                                                          child: Center(
+                                                              child:
+                                                                  Text("00"))),
+                                                      Divider(
+                                                        height: 40,
+                                                        color: Colors.black38,
+                                                        thickness: 1,
+                                                      ),
+                                                      SizedBox(
+                                                          height: 40,
+                                                          width: 30,
+                                                          child: Center(
+                                                              child:
+                                                                  Text("+"))),
+                                                    ],
                                                   ),
                                                 ),
-                                                Spacer(), // Push the delete icon to the right
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    kartCubit.removeFromCart(
-                                                        cartItems[intex]);
-                                                  },
-                                                  child: Icon(Icons.delete),
-                                                ),
+                                                Text(
+                                                    "\$${cartItems[intex].price}")
                                               ],
-                                            ),
-                                          ),
-                                        ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 );
-                              }))
+                              })),
+                      Container(
+                        height: 80,
+                        padding: EdgeInsets.only(right: 22, bottom: 8),
+                        alignment: Alignment.centerRight,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Total",
+                              style: TextStyle(color: Colors.black26),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              "\$400",
+                              style: TextStyle(
+                                  color: Colors.black26, fontSize: 34),
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(child: SizedBox())
                     ],
                   );
                 } else if (state is KartFail) {
-                  return Text("Add to cart",
+                  return Text("kert is emty",
                       style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
                           color: Colors.black));
                 } else {
-                  return Text("Add to cart",
+                  return Text("something went wrong",
                       style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
